@@ -6,7 +6,8 @@ The project demonstrates core functional programming concepts in Elixir, includi
 
 ## Instructions for Build and Use
 
-[Software Demo](https://youtu.be/hV1JFDelKR8)
+[Module 3 Demo](https://youtu.be/sznxjErD4oM)
+[Module 2 Demo](https://youtu.be/hV1JFDelKR8)
 
 ### Environment Configuration:
 
