@@ -4,16 +4,11 @@ defmodule FamilyFoundations.Discovery.Subject do
 
   schema "subjects" do
     field :common_name, :string
-
-    # Relationships pointing "up"
     belongs_to :category, FamilyFoundations.Discovery.Category
     belongs_to :user, FamilyFoundations.Accounts.User
-
-    # Relationships pointing "down" (Class Table Inheritance)
     has_one :animal, FamilyFoundations.Discovery.Animal
     has_one :color, FamilyFoundations.Discovery.Color
     has_one :shape, FamilyFoundations.Discovery.Shape
-
     has_many :media, FamilyFoundations.Discovery.MediaAsset
 
     timestamps(type: :utc_datetime)

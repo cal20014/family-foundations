@@ -14,7 +14,6 @@ alias FamilyFoundations.Repo
 alias FamilyFoundations.Accounts.User
 alias FamilyFoundations.Discovery.{Category, Subject, Animal, Color, Shape, MediaAsset}
 
-# 1. Setup User
 user_email = "parent@example.com"
 
 user =
@@ -25,7 +24,6 @@ user =
       confirmed_at: DateTime.utc_now() |> DateTime.truncate(:second)
     })
 
-# 2. Setup Categories
 categories = ["Animals", "Colors", "Shapes"]
 
 cat_map =
@@ -39,7 +37,6 @@ cat_map =
 
 IO.puts("Seeding 10 of each category...")
 
-# 3. Seed 10 Animals
 animals = [
   {"Lion", "Panthera leo"},
   {"Tiger", "Panthera tigris"},
@@ -67,7 +64,6 @@ Enum.each(animals, fn {name, sci} ->
   })
 end)
 
-# 4. Seed 10 Colors
 colors = [
   {"Red", "#FF0000"},
   {"Blue", "#0000FF"},
@@ -93,7 +89,6 @@ Enum.each(colors, fn {name, hex} ->
   })
 end)
 
-# 5. Seed 10 Shapes
 shapes = [
   "Circle",
   "Square",
