@@ -180,7 +180,10 @@ defmodule FamilyFoundations.Discovery do
 
   """
   def list_subjects(%Scope{} = scope) do
-    Repo.all_by(Subject, user_id: scope.user.id)
+    Subject
+    |> where([s], s.user_id == ^scope.user.id)
+    |> preload([:category, :animal, :color, :shape])
+    |> Repo.all()
   end
 
   @doc """
@@ -198,7 +201,10 @@ defmodule FamilyFoundations.Discovery do
 
   """
   def get_subject!(%Scope{} = scope, id) do
-    Repo.get_by!(Subject, id: id, user_id: scope.user.id)
+    Subject
+    |> where([s], s.id == ^id and s.user_id == ^scope.user.id)
+    |> preload([:category, :animal, :color, :shape])
+    |> Repo.one!()
   end
 
   @doc """
@@ -216,6 +222,7 @@ defmodule FamilyFoundations.Discovery do
   def create_subject(%Scope{} = scope, attrs) do
     with {:ok, subject = %Subject{}} <-
            %Subject{}
+           |> Repo.preload([:animal, :color, :shape])
            |> Subject.changeset(attrs, scope)
            |> Repo.insert() do
       broadcast_subject(scope, {:created, subject})
@@ -240,6 +247,7 @@ defmodule FamilyFoundations.Discovery do
 
     with {:ok, subject = %Subject{}} <-
            subject
+           |> Repo.preload([:animal, :color, :shape])
            |> Subject.changeset(attrs, scope)
            |> Repo.update() do
       broadcast_subject(scope, {:updated, subject})
@@ -281,7 +289,9 @@ defmodule FamilyFoundations.Discovery do
   def change_subject(%Scope{} = scope, %Subject{} = subject, attrs \\ %{}) do
     true = subject.user_id == scope.user.id
 
-    Subject.changeset(subject, attrs, scope)
+    subject
+    |> Repo.preload([:animal, :color, :shape])
+    |> Subject.changeset(attrs, scope)
   end
 
   alias FamilyFoundations.Discovery.Animal

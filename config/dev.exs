@@ -6,7 +6,8 @@ config :family_foundations, FamilyFoundations.Repo,
   ssl: [verify: :verify_none],
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
-  pool_size: 10
+  pool_size: 10,
+  prepare: :unnamed
 
 # Configure the Endpoint (Web Server)
 config :family_foundations, FamilyFoundationsWeb.Endpoint,

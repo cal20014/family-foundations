@@ -495,4 +495,83 @@ defmodule FamilyFoundationsWeb.CoreComponents do
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
   end
+
+  @doc """
+  Renders a modal using standard Phoenix JS hooks and daisyUI styling.
+  """
+  attr :id, :string, required: true
+  attr :show, :boolean, default: false
+  attr :on_cancel, Phoenix.LiveView.JS, default: %Phoenix.LiveView.JS{}
+  slot :inner_block, required: true
+
+  def modal(assigns) do
+    ~H"""
+    <div
+      id={@id}
+      phx-mounted={@show && show_modal(@id)}
+      phx-remove={hide_modal(@id)}
+      data-cancel={JS.exec(@on_cancel, "phx-remove")}
+      class="hidden relative z-50"
+    >
+      <dialog
+        id={"#{@id}-dialog"}
+        class="modal"
+        phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
+        phx-key="escape"
+      >
+        <div class="modal-box max-w-2xl bg-base-100" id={"#{@id}-content"}>
+          <form method="dialog">
+            <button
+              type="button"
+              class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+              phx-click={JS.exec("data-cancel", to: "##{@id}")}
+            >
+              ✕
+            </button>
+          </form>
+          {render_slot(@inner_block)}
+        </div>
+
+        <form method="dialog" class="modal-backdrop">
+          <button type="button" phx-click={JS.exec("data-cancel", to: "##{@id}")}>close</button>
+        </form>
+      </dialog>
+    </div>
+    """
+  end
+
+  @doc """
+  Standard Phoenix function to show a modal with JS commands.
+  """
+  def show_modal(js \\ %JS{}, id) when is_binary(id) do
+    js
+    |> JS.show(to: "##{id}")
+    |> JS.add_class("modal-open", to: "##{id}-dialog")
+    |> JS.show(
+      to: "##{id}-content",
+      time: 300,
+      transition:
+        {"transition-all ease-out duration-300",
+         "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95",
+         "opacity-100 translate-y-0 sm:scale-100"}
+    )
+    |> JS.focus_first(to: "##{id}-content")
+  end
+
+  @doc """
+  Standard Phoenix function to hide a modal with JS commands.
+  """
+  def hide_modal(js \\ %JS{}, id) do
+    js
+    |> JS.remove_class("modal-open", to: "##{id}-dialog")
+    |> JS.hide(
+      to: "##{id}-content",
+      time: 200,
+      transition:
+        {"transition-all ease-in duration-200", "opacity-100 translate-y-0 sm:scale-100",
+         "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"}
+    )
+    |> JS.hide(to: "##{id}", transition: {"block", "block", "hidden"})
+    |> JS.pop_focus()
+  end
 end

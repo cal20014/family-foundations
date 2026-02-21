@@ -54,6 +54,11 @@ defmodule FamilyFoundationsWeb.Router do
       on_mount: [{FamilyFoundationsWeb.UserAuth, :require_authenticated}] do
       live "/users/settings", UserLive.Settings, :edit
       live "/users/settings/confirm-email/:token", UserLive.Settings, :confirm_email
+
+      # Discovery / Flashcard Routes
+      live "/subjects", SubjectLive.Index, :index
+      live "/subjects/new", SubjectLive.Index, :new
+      live "/subjects/:id/edit", SubjectLive.Index, :edit
     end
 
     post "/users/update-password", UserSessionController, :update_password
