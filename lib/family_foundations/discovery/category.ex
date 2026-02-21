@@ -5,7 +5,7 @@ defmodule FamilyFoundations.Discovery.Category do
   schema "categories" do
     field :name, :string
     field :description, :string
-    field :user_id, :id
+    belongs_to :user, FamilyFoundations.Accounts.User
 
     timestamps(type: :utc_datetime)
   end

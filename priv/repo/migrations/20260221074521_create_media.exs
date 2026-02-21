@@ -6,7 +6,7 @@ defmodule FamilyFoundations.Repo.Migrations.CreateMedia do
       add :media_type, :string
       add :file_url, :string
       add :description, :string
-      add :subject_id, references(:subjects, on_delete: :nothing)
+      add :subject_id, references(:subjects, on_delete: :delete_all)
       add :user_id, references(:users, type: :id, on_delete: :delete_all)
 
       timestamps(type: :utc_datetime)

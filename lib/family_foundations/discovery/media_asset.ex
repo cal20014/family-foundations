@@ -6,8 +6,8 @@ defmodule FamilyFoundations.Discovery.MediaAsset do
     field :media_type, :string
     field :file_url, :string
     field :description, :string
-    field :subject_id, :id
-    field :user_id, :id
+    belongs_to :subject, FamilyFoundations.Discovery.Subject
+    belongs_to :user, FamilyFoundations.Accounts.User
 
     timestamps(type: :utc_datetime)
   end
